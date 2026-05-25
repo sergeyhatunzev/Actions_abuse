@@ -14,9 +14,7 @@ jobs:
 
       - name: Run full analysis
         run: |
-          r2 -e bin.cache=true -e anal.cc=0 -AA app.so -q \
-          -c "aaa; aaaa; afl; aflj; iz; izz; iS; is; ii; iI; axt @@ /ad xor; axt @@ /ad eor" \
-          > dump.txt
+          r2 -e bin.relocs.apply=true -e bin.cache=true -A app.so -q -i script.r2 | tee dump_full.txt
 
       - name: Upload result
         uses: actions/upload-artifact@v4
