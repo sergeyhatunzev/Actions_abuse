@@ -1,0 +1,23 @@
+name: r2-dump
+
+on:
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install radare2
+        run: sudo apt-get install -y radare2
+
+      - name: Run analysis
+        run: |
+          r2 -e bin.cache=true -e anal.cc=0 -A app.so -q -i script.r2 | tee dump.txt
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: dump
+          path: dump.txt
