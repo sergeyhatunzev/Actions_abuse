@@ -6,18 +6,35 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install radare2
         run: sudo apt-get install -y radare2
 
-      - name: Run full analysis
+      - name: Full analysis + dump
         run: |
-          r2 -e bin.relocs.apply=true -e bin.cache=true -A app.so -q -i script.r2 | tee dump_full.txt
+          r2 -AA -e bin.cache=true -e anal.cc=0 -q app.so -c "
+          aaa;
+          aaaa;
+          iI;
+          ii;
+          afl;
+          aflj;
+          izz;
+          iS;
+          is;
+          agfj;
+          agfd;
+          agfv;
+          pdf @@ fcn.*;
+          axt @@ /ad xor;
+          axt @@ /ad eor;
+          " > dump.txt
 
-      - name: Upload result
+      - name: Upload dump
         uses: actions/upload-artifact@v4
         with:
-          name: dump
+          name: r2-dump
           path: dump.txt
